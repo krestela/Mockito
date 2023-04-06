@@ -1,12 +1,18 @@
 package dao;
 
 import com.example.mockito.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,38 +21,29 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDaoTest {
-
-    private static User user;
-    private static final UserDaoImpl out = mock(UserDaoImpl.class);
-
     private final String HELENA = "Helena";
     private final String MAKS = "Maks";
-    private final String OLGA = "Olga";
-    private final List<User> users = List.of(new User(HELENA), new User(MAKS),
-            new User(OLGA));
-
+    private final List<User> USER_LIST = new ArrayList(Arrays.asList(new User("Stepan"), new User("Jonny"), new  User ("Ron")));
+    UserDaoImpl userDao;
     @BeforeEach
-    void createNewUser() {
-        user = new User(HELENA);
+    private void createNewUser() {
+        userDao = new UserDaoImpl();
     }
 
     @Test
     void shouldFindUserByNameIfExist() {
-        when(out.getUserByName(HELENA)).thenReturn(user);
-        assertEquals(user, out.getUserByName(HELENA));
+        Assertions.assertEquals(HELENA, userDao.getUserByName(HELENA));
     }
 
     @Test
     void shouldReturnNullIfUserNotExist() {
-        String GRISHA = "Grisha";
-        when(out.getUserByName(GRISHA)).thenReturn(null);
-        assertNull(out.getUserByName(GRISHA));
+        Assertions.assertNull(null, (Supplier<String>) userDao.getUserByName(MAKS));
     }
 
     @Test
     void findAllUsers() {
-        when(out.findAllUsers()).thenReturn(users);
-        assertEquals(out.findAllUsers(), users);
+        Assertions.assertEquals(USER_LIST, userDao.findAllUsers());
     }
+
 }
 
